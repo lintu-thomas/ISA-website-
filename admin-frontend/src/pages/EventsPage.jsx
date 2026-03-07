@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import api from "../utils/api";
-import { Plus, Edit2, Trash2, Calendar, MapPin, Search } from "lucide-react";
+import { Plus, Edit2, Trash2, Calendar, MapPin } from "lucide-react";
 import toast from "react-hot-toast";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -9,6 +9,7 @@ const EventsPage = () => {
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentEvent, setCurrentEvent] = useState(null);
+  const [eventToDelete, setEventToDelete] = useState(null);
   
   // Form State
   const [formData, setFormData] = useState({
@@ -89,15 +90,16 @@ const EventsPage = () => {
     }
   };
 
-  const handleDelete = async (id) => {
-    if (window.confirm("Are you sure you want to delete this event?")) {
-      try {
-        await api.delete(`/events/${id}`);
-        toast.success("Event deleted");
-        fetchEvents();
-      } catch (err) {
-        toast.error("Failed to delete event");
-      }
+  const confirmDelete = async () => {
+    if (!eventToDelete) return;
+    try {
+      await api.delete(`/events/${eventToDelete}`);
+      toast.success("Event deleted");
+      fetchEvents();
+    } catch (err) {
+      toast.error("Failed to delete event");
+    } finally {
+      setEventToDelete(null);
     }
   };
 
@@ -105,7 +107,7 @@ const EventsPage = () => {
     <div className="space-y-6" style={{ fontFamily: "Times New Roman" }}>
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b-2 border-sju-navy pb-4">
         <div>
-          <h1 className="text-[28px] text-sju-navy tracking-tight" style={{ fontFamily: "Georgia" }}>Calendar Management</h1>
+          <h1 className="text-[28px] text-sju-navy tracking-tight" style={{ fontFamily: "Georgia" }}>Calendar Events</h1>
           <p className="text-sju-gray mt-1 text-[15px]">Organize and schedule upcoming university events.</p>
         </div>
         <button
@@ -118,18 +120,10 @@ const EventsPage = () => {
       </div>
 
       <div className="bg-white rounded-[10px] shadow-elegant border border-sju-border overflow-hidden">
-        <div className="p-4 border-b border-sju-border flex items-center justify-between bg-sju-light leading-none">
-          <div className="relative w-72">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-sju-gray/60" size={18} />
-            <input 
-              type="text" 
-              placeholder="Search schedule..." 
-              className="w-full pl-12 pr-4 py-2 border border-sju-border rounded-[6px] text-[15px] focus:outline-none focus:ring-2 focus:ring-sju-navy/20 focus:border-sju-navy transition-all bg-white text-sju-navy placeholder-sju-gray/50 shadow-sm"
-              style={{ fontFamily: "Times New Roman" }}
-            />
-          </div>
-          <div className="text-[13px] font-bold text-white px-3 py-1.5 bg-[#413543] rounded-[6px] shadow-sm tracking-wide">
-            Total Calendars: {events.length}
+        <div className="p-4 border-b border-sju-border flex items-center justify-end bg-sju-light leading-none">
+          <div className="flex items-center gap-2 text-[14px] font-bold text-sju-navy px-4 py-2 bg-white border border-sju-border rounded-[6px] shadow-sm tracking-wide">
+            <Calendar size={16} className="text-sju-gray opacity-80" />
+            Total Schedule Events: {events.length}
           </div>
         </div>
 
@@ -167,28 +161,23 @@ const EventsPage = () => {
               ) : (
                 events.map((event) => (
                   <tr key={event._id} className="border-b border-sju-border/50 hover:bg-[#FAF8F3] transition-colors group">
-                    <td className="p-5 font-bold text-sju-navy text-[16px]">
-                      <div className="flex items-center gap-3">
-                        <span>{event.title}</span>
-                      </div>
+                    <td className="p-5 text-[15px] font-bold text-sju-navy">
+                      {event.title}
                     </td>
-                    <td className="p-5">
-                      <div className="flex items-center px-3 py-1 bg-[#413543] text-[#F0E9D2] rounded-[6px] w-max text-[13px] font-bold shadow-sm">
-                        <Calendar size={13} className="mr-2 opacity-80" />
-                        {new Date(event.date).toLocaleString(undefined, {
-                          year: 'numeric', month: 'short', day: 'numeric',
-                          hour: '2-digit', minute: '2-digit'
-                        })}
-                      </div>
+                    <td className="p-5 text-[14px] font-bold text-sju-gray">
+                      {new Date(event.date).toLocaleString(undefined, {
+                        year: 'numeric', month: 'short', day: 'numeric',
+                        hour: '2-digit', minute: '2-digit'
+                      })}
                     </td>
-                    <td className="p-5 text-sju-gray text-[15px]">
-                      <div className="flex items-center">
-                        <MapPin size={16} className="mr-2 text-sju-gray/60 flex-shrink-0" />
+                    <td className="p-5 text-sju-gray text-[14px] font-medium">
+                      <div className="flex items-center gap-1.5 opacity-90">
+                        <MapPin size={15} className="text-sju-navy/50 flex-shrink-0" />
                         <span className="truncate max-w-[150px]">{event.location}</span>
                       </div>
                     </td>
-                    <td className="p-5 text-sju-gray text-[15px] leading-relaxed">
-                      <div className="line-clamp-2 max-w-[300px]">{event.description}</div>
+                    <td className="p-5 text-sju-gray text-[14px] leading-relaxed max-w-[300px] truncate">
+                      {event.description}
                     </td>
                     <td className="p-5 text-right">
                       <div className="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
@@ -200,7 +189,7 @@ const EventsPage = () => {
                           <Edit2 size={16} />
                         </button>
                         <button
-                          onClick={() => handleDelete(event._id)}
+                          onClick={() => setEventToDelete(event._id)}
                           className="p-2 text-sju-gray hover:text-red-700 hover:bg-red-50 rounded-[6px] transition-all duration-200"
                           title="Delete"
                         >
@@ -316,6 +305,55 @@ const EventsPage = () => {
                   className="px-5 py-2.5 font-bold bg-sju-navy hover:bg-[#132056] text-white rounded-[6px] shadow-sm hover:shadow transition-all text-[15px]"
                 >
                   {currentEvent ? "Save Changes" : "Create Event"}
+                </button>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
+      {/* Delete Confirmation Modal */}
+      <AnimatePresence>
+        {eventToDelete && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="absolute inset-0 bg-sju-navy/40 backdrop-blur-sm"
+              onClick={() => setEventToDelete(null)}
+            ></motion.div>
+            
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              transition={{ type: "spring", duration: 0.5, bounce: 0.3 }}
+              className="relative w-full max-w-sm bg-white rounded-[10px] shadow-2xl border border-sju-border overflow-hidden text-center"
+              style={{ fontFamily: "Times New Roman" }}
+            >
+              <div className="p-6 pb-2 pt-8">
+                <div className="mx-auto w-12 h-12 bg-red-50 rounded-full flex items-center justify-center mb-4 border border-red-100">
+                  <Trash2 className="text-red-500" size={24} />
+                </div>
+                <h2 className="text-[20px] font-bold text-sju-navy mb-2" style={{ fontFamily: "Georgia" }}>Delete Calendar Event</h2>
+                <p className="text-[15px] text-sju-gray px-4">
+                  Are you sure you want to delete this calendar event? This action cannot be undone.
+                </p>
+              </div>
+
+              <div className="p-6 flex items-center justify-center gap-3">
+                <button 
+                  onClick={() => setEventToDelete(null)} 
+                  className="flex-1 px-4 py-2.5 font-bold text-sju-gray hover:bg-sju-light border border-sju-border rounded-[6px] transition-colors"
+                >
+                  Cancel
+                </button>
+                <button 
+                  onClick={confirmDelete} 
+                  className="flex-1 px-4 py-2.5 font-bold bg-[#ffe0e0] text-red-700 hover:bg-red-600 hover:text-white rounded-[6px] transition-all shadow-sm"
+                >
+                  Delete
                 </button>
               </div>
             </motion.div>

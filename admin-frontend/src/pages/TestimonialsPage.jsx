@@ -9,6 +9,7 @@ const TestimonialsPage = () => {
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingId, setEditingId] = useState(null);
+  const [testimonialToDelete, setTestimonialToDelete] = useState(null);
   
   const [formData, setFormData] = useState({
     name: "",
@@ -86,15 +87,16 @@ const TestimonialsPage = () => {
     }
   };
 
-  const handleDelete = async (id) => {
-    if (window.confirm("Delete this testimonial?")) {
-      try {
-        await api.delete(`/testimonials/${id}`);
-        toast.success("Testimonial deleted");
-        fetchTestimonials();
-      } catch (err) {
-        toast.error("Deletion failed");
-      }
+  const confirmDelete = async () => {
+    if (!testimonialToDelete) return;
+    try {
+      await api.delete(`/testimonials/${testimonialToDelete}`);
+      toast.success("Testimonial deleted");
+      fetchTestimonials();
+    } catch (err) {
+      toast.error("Deletion failed");
+    } finally {
+      setTestimonialToDelete(null);
     }
   };
 
@@ -151,7 +153,7 @@ const TestimonialsPage = () => {
                     <button onClick={() => handleOpenModal(testi)} className="p-2 text-sju-gray hover:text-sju-navy hover:bg-sju-light rounded-md transition-colors opacity-0 group-hover:opacity-100">
                       <Edit2 size={16} />
                     </button>
-                    <button onClick={() => handleDelete(testi._id)} className="p-2 text-sju-gray hover:text-red-700 hover:bg-red-50 rounded-md transition-colors opacity-0 group-hover:opacity-100">
+                    <button onClick={() => setTestimonialToDelete(testi._id)} className="p-2 text-sju-gray hover:text-red-700 hover:bg-red-50 rounded-md transition-colors opacity-0 group-hover:opacity-100">
                       <Trash2 size={16} />
                     </button>
                   </div>
@@ -231,6 +233,55 @@ const TestimonialsPage = () => {
           </div>
          )}
         </AnimatePresence>
+
+      {/* Delete Confirmation Modal */}
+      <AnimatePresence>
+        {testimonialToDelete && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="absolute inset-0 bg-sju-navy/40 backdrop-blur-sm"
+              onClick={() => setTestimonialToDelete(null)}
+            ></motion.div>
+            
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              transition={{ type: "spring", duration: 0.5, bounce: 0.3 }}
+              className="relative w-full max-w-sm bg-white rounded-[10px] shadow-2xl border border-sju-border overflow-hidden text-center"
+              style={{ fontFamily: "Times New Roman" }}
+            >
+              <div className="p-6 pb-2 pt-8">
+                <div className="mx-auto w-12 h-12 bg-red-50 rounded-full flex items-center justify-center mb-4 border border-red-100">
+                  <Trash2 className="text-red-500" size={24} />
+                </div>
+                <h2 className="text-[20px] font-bold text-sju-navy mb-2" style={{ fontFamily: "Georgia" }}>Delete Testimonial</h2>
+                <p className="text-[15px] text-sju-gray px-4">
+                  Are you sure you want to delete this testimonial? This action cannot be undone.
+                </p>
+              </div>
+
+              <div className="p-6 flex items-center justify-center gap-3">
+                <button 
+                  onClick={() => setTestimonialToDelete(null)} 
+                  className="flex-1 px-4 py-2.5 font-bold text-sju-gray hover:bg-sju-light border border-sju-border rounded-[6px] transition-colors"
+                >
+                  Cancel
+                </button>
+                <button 
+                  onClick={confirmDelete} 
+                  className="flex-1 px-4 py-2.5 font-bold bg-[#ffe0e0] text-red-700 hover:bg-red-600 hover:text-white rounded-[6px] transition-all shadow-sm"
+                >
+                  Delete
+                </button>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };

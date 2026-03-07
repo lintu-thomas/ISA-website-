@@ -12,8 +12,8 @@ const Sidebar = () => {
 
   const navItems = [
     { name: "Dashboard", path: "/", icon: <LayoutDashboard size={20} /> },
-    { name: "Calendar Management", path: "/calendar", icon: <Calendar size={20} /> },
-    { name: "Events Management", path: "/events", icon: <ImageIcon size={20} /> },
+    { name: "Calendar Events", path: "/calendar", icon: <Calendar size={20} /> },
+    { name: "Events", path: "/events", icon: <ImageIcon size={20} /> },
     { name: "Appointments", path: "/appointments", icon: <CalendarHeart size={20} /> },
     { name: "Testimonials", path: "/testimonials", icon: <MessageSquareQuote size={20} /> },
   ];

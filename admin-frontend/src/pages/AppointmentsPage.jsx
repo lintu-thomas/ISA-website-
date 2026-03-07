@@ -2,10 +2,12 @@ import React, { useState, useEffect } from "react";
 import api from "../utils/api";
 import { Trash2, CalendarHeart, Loader2 } from "lucide-react";
 import toast from "react-hot-toast";
+import { motion, AnimatePresence } from "framer-motion";
 
 const AppointmentsPage = () => {
   const [appointments, setAppointments] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [appointmentToDelete, setAppointmentToDelete] = useState(null);
 
   const fetchAppointments = async () => {
     try {
@@ -22,15 +24,20 @@ const AppointmentsPage = () => {
     fetchAppointments();
   }, []);
 
-  const handleDelete = async (id) => {
-    if (window.confirm("Are you sure you want to delete this appointment?")) {
-      try {
-        await api.delete(`/appointments/${id}`);
-        toast.success("Appointment removed");
-        fetchAppointments();
-      } catch (err) {
-        toast.error("Deletion failed");
-      }
+  const triggerDelete = (id) => {
+    setAppointmentToDelete(id);
+  };
+
+  const confirmDelete = async () => {
+    if (!appointmentToDelete) return;
+    try {
+      await api.delete(`/appointments/${appointmentToDelete}`);
+      toast.success("Appointment removed");
+      fetchAppointments();
+    } catch (err) {
+      toast.error("Deletion failed");
+    } finally {
+      setAppointmentToDelete(null);
     }
   };
 
@@ -103,7 +110,7 @@ const AppointmentsPage = () => {
                          </span>
                       </td>
                       <td className="p-5 text-right">
-                         <button onClick={() => handleDelete(appt._id)} className="p-2 text-sju-gray hover:text-red-700 hover:bg-red-50 rounded-[6px] transition-all duration-200" title="Delete Booking">
+                         <button onClick={() => triggerDelete(appt._id)} className="p-2 text-sju-gray hover:text-red-700 hover:bg-red-50 rounded-[6px] transition-all duration-200" title="Delete Booking">
                            <Trash2 size={16} />
                          </button>
                       </td>
@@ -115,6 +122,55 @@ const AppointmentsPage = () => {
           </table>
         </div>
       </div>
+
+      {/* Delete Confirmation Modal */}
+      <AnimatePresence>
+        {appointmentToDelete && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="absolute inset-0 bg-sju-navy/40 backdrop-blur-sm"
+              onClick={() => setAppointmentToDelete(null)}
+            ></motion.div>
+            
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              transition={{ type: "spring", duration: 0.5, bounce: 0.3 }}
+              className="relative w-full max-w-sm bg-white rounded-[10px] shadow-2xl border border-sju-border overflow-hidden text-center"
+              style={{ fontFamily: "Times New Roman" }}
+            >
+              <div className="p-6 pb-2 pt-8">
+                <div className="mx-auto w-12 h-12 bg-red-50 rounded-full flex items-center justify-center mb-4 border border-red-100">
+                  <Trash2 className="text-red-500" size={24} />
+                </div>
+                <h2 className="text-[20px] font-bold text-sju-navy mb-2" style={{ fontFamily: "Georgia" }}>Delete Booking</h2>
+                <p className="text-[15px] text-sju-gray px-4">
+                  Are you sure you want to completely erase this appointment? This action cannot be undone.
+                </p>
+              </div>
+
+              <div className="p-6 flex items-center justify-center gap-3">
+                <button 
+                  onClick={() => setAppointmentToDelete(null)} 
+                  className="flex-1 px-4 py-2.5 font-bold text-sju-gray hover:bg-sju-light border border-sju-border rounded-[6px] transition-colors"
+                >
+                  Cancel
+                </button>
+                <button 
+                  onClick={confirmDelete} 
+                  className="flex-1 px-4 py-2.5 font-bold bg-[#ffe0e0] text-red-700 hover:bg-red-600 hover:text-white rounded-[6px] transition-all shadow-sm"
+                >
+                  Delete
+                </button>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };

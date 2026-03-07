@@ -11,8 +11,15 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    if (token) {
+    const expiry = localStorage.getItem("token_expiry");
+    
+    if (token && expiry && new Date().getTime() < parseInt(expiry, 10)) {
       setIsAuthenticated(true);
+    } else {
+      // Clear expired token automatically
+      localStorage.removeItem("token");
+      localStorage.removeItem("token_expiry");
+      setIsAuthenticated(false);
     }
     setLoading(false);
   }, []);
@@ -22,6 +29,11 @@ export const AuthProvider = ({ children }) => {
       const res = await api.post("/admin/login", { email, password });
       if (res.data.success) {
         localStorage.setItem("token", res.data.token);
+        
+        // Let's set expiration to 30 minutes (1800000 ms) from now
+        const expiryTime = new Date().getTime() + 1800000;
+        localStorage.setItem("token_expiry", expiryTime.toString());
+        
         setIsAuthenticated(true);
         return { success: true };
       }
@@ -35,6 +47,7 @@ export const AuthProvider = ({ children }) => {
 
   const logout = () => {
     localStorage.removeItem("token");
+    localStorage.removeItem("token_expiry");
     setIsAuthenticated(false);
   };
 

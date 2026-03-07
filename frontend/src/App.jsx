@@ -17,7 +17,7 @@ import Scholarships from "./pages/Scholarships";
 // Administrator Redirect
 const AdminRedirect = () => {
   useEffect(() => {
-    window.location.href = "http://localhost:5173";
+    window.location.href = "http://localhost:5174/login";
   }, []);
   return <div className="min-h-screen flex items-center justify-center font-bold text-gray-500">Redirecting to Admin Portal...</div>;
 };
