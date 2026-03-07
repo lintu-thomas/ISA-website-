@@ -30,7 +30,7 @@ mongoose
     if (!adminExists) {
       console.log("Seeding default admin...");
       const salt = await bcrypt.genSalt(10);
-      const hashedPassword = await bcrypt.hash('SjuAdmin@2024!', salt);
+      const hashedPassword = await bcrypt.hash('admin123', salt);
       await AdminUser.create({
         email: 'admin@sju.com',
         password: hashedPassword
