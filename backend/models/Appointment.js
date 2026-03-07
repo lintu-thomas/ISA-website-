@@ -4,7 +4,10 @@ const appointmentSchema = new mongoose.Schema(
   {
     date: { type: String, required: true },
     issue: { type: String, required: true },
-    notes: { type: String }
+    notes: { type: String },
+    studentName: { type: String, required: true },
+    studentRegNo: { type: String, required: true },
+    studentEmail: { type: String, required: true }
   },
   { timestamps: true }
 );

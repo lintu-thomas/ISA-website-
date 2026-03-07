@@ -1,27 +1,26 @@
-import React, { useState } from "react";
-
-
-const images = [
-  "/sjuaspire.jpg", 
-  "/investiture.jpeg", 
-  "/elixir.jpeg",
-  "/g1.jpg",
-  "/g2.jpg",
-  "/g3.jpg",
-  "/g4.jpg",
-  "/g6.jpg",
-  "/g7.jpeg",
-  "/g8.jpeg",
-  "/g9.jpeg",
-  "/g12.jpeg",
-  "/g15.jpeg",
-  "/g16.jpeg",
-
-
-];
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 
 export default function Gallery() {
+  const [images, setImages] = useState([]);
   const [index, setIndex] = useState(0);
+  const [loading, setLoading] = useState(true);
+  
+  const backendUrl = "http://localhost:5000"; // Dev URL
+
+  useEffect(() => {
+    const fetchGallery = async () => {
+      try {
+        const { data } = await axios.get(`${backendUrl}/api/gallery`);
+        setImages(data);
+      } catch (error) {
+        console.error("Error fetching gallery:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchGallery();
+  }, []);
 
   const prev = () =>
     setIndex((index - 1 + images.length) % images.length);
@@ -40,33 +39,39 @@ export default function Gallery() {
       <h1 style={styles.heading}>Gallery</h1>
       <div style={styles.underline}></div>
 
+      {loading ? (
+        <div style={{ padding: "50px", fontSize: "18px", color: "#555" }}>Loading gallery...</div>
+      ) : images.length === 0 ? (
+        <div style={{ padding: "50px", fontSize: "18px", color: "#555" }}>No images uploaded yet.</div>
+      ) : (
+        <div style={styles.slider}>
+          {images.map((imgObj, i) => {
+            const position = getPosition(i);
+            return (
+              <img
+                key={imgObj._id || i}
+                src={`${backendUrl}${imgObj.imageUrl}`}
+                alt={imgObj.title || `Gallery ${i}`}
+                style={{
+                  ...styles.image,
+                  ...styles[position],
+                }}
+              />
+            );
+          })}
 
-      <div style={styles.slider}>
-        {images.map((img, i) => {
-          const position = getPosition(i);
-          return (
-            <img
-              key={i}
-              src={img}
-              alt={`Gallery ${i}`}
-              style={{
-                ...styles.image,
-                ...styles[position],
-              }}
-            />
-          );
-        })}
-
-        <button onClick={prev} style={{ ...styles.arrow, left: "40px" }}>
-          ❮
-        </button>
-        <button onClick={next} style={{ ...styles.arrow, right: "40px" }}>
-          ❯
-        </button>
-      </div>
+          <button onClick={prev} style={{ ...styles.arrow, left: "40px" }}>
+            ❮
+          </button>
+          <button onClick={next} style={{ ...styles.arrow, right: "40px" }}>
+            ❯
+          </button>
+        </div>
+      )}
     </section>
   );
 }
+
 const styles = {
   section: {
     padding: "80px 20px",

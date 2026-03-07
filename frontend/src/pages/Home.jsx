@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import Calendar from "./Calendar";
 
 /* HERO IMAGES */
 import ha1 from "../assets/ha1.png";
@@ -55,7 +56,7 @@ export default function Home() {
     ["6", "7", "8", "9", "10", "11", "12"],
     ["13", "14", "15", "16", "17", "18", "19"],
     ["20", "21", "22", "23", "24", "25", "26"],
-    ["27", "28", "29", "30", "31", "", ""],
+    ["27", "28", "", "", "", "", ""],
   ];
 
   const marked = {
@@ -130,12 +131,12 @@ export default function Home() {
       <section style={aboutSection}>
         <h2 style={aboutHeading}>About Us</h2>
         <p>
-          Founded in 1882, St Joseph’s University, Bengaluru is one of India’s oldest and most prestigious institutions 
+          Founded in 1882, St Joseph’s University, Bengaluru is one of India’s oldest and most prestigious institutions
           of higher education. Administered by the Society of Jesus (Jesuits), a worldwide organization renowned for academic excellence and character formation, the University upholds a legacy of holistic education rooted in values, innovation, and social responsibility.
         </p>
         <p style={{ marginTop: "10px" }}>
-          Elevated to University status on 2nd July 2022 under the Government of Karnataka’s R.U.S.A. scheme, 
-          St Joseph’s University holds the unique distinction of being India’s first Public-Private Partnership (PPP) University.  
+          Elevated to University status on 2nd July 2022 under the Government of Karnataka’s R.U.S.A. scheme,
+          St Joseph’s University holds the unique distinction of being India’s first Public-Private Partnership (PPP) University.
           The institution is committed to providing world-class, affordable education to students of all nationalities, irrespective of caste,
           creed, or economic background.
         </p>
@@ -180,73 +181,66 @@ export default function Home() {
           ))}
         </div>
         <div style={half}>
-          <h3 style={sectionTitle}>International & University Events – January 2025</h3>
-          <p style={{ fontSize: "13px", marginBottom: "10px" }}>
-            UN observances, global student events & SJU programs
-          </p>
-          <div style={calendarGrid}>
-            {calendar.flat().map((day, i) => (
-              <div key={i} style={dayBox}>
-                <div style={{ fontWeight: "bold" }}>{day}</div>
-                {marked[day] && <div style={eventTag}>{marked[day]}</div>}
-              </div>
-            ))}
+          <h3 style={sectionTitle}>INTERNATIONAL & UNIVERSITY EVENTS CALENDER </h3>
+
+          <div>
+            <Calendar />
           </div>
         </div>
       </section>
-{/* FACULTY */}
-<section style={membersSection}> <h3 style={sectionTitle}>Faculty</h3>
-  <div
-    style={{
-      display: "flex",
-      flexWrap: "wrap",
-      justifyContent: "center", // centers cards horizontally
-      gap: "50px",              // space between cards
-    }}
-  >
-    {faculty.map((m, i) => (
-      <div
-        key={i}
-        style={{
-          width: "200px",
-          height: "auto",
-          borderRadius: "8px",
-          overflow: "hidden",
-          boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
-          background: "#fff",
-        }}
-      >
+      {/* FACULTY */}
+      <section style={membersSection}> <h3 style={sectionTitle}>Faculty</h3>
         <div
           style={{
-            width: "100%",
-            height: "200px",
-            overflow: "hidden",
             display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            background: "#f0f0f0",
+            flexWrap: "wrap",
+            justifyContent: "center", // centers cards horizontally
+            gap: "50px",              // space between cards
           }}
         >
-          <img
-            src={m.img}
-            alt={m.name}
-            style={{
-              maxWidth: "100%",
-              maxHeight: "100%",
-              objectFit: "contain",
-            }}
-          />
+          {faculty.map((m, i) => (
+            <div
+              key={i}
+              style={{
+                width: "200px",
+                height: "auto",
+                borderRadius: "8px",
+                overflow: "hidden",
+                boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
+                background: "#fff",
+              }}
+            >
+              <div
+                style={{
+                  width: "100%",
+                  height: "200px",
+                  overflow: "hidden",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  background: "#f0f0f0",
+                }}
+              >
+                <img
+                  src={m.img}
+                  alt={m.name}
+                  style={{
+                    maxWidth: "100%",
+                    maxHeight: "100%",
+                    objectFit: "contain",
+                  }}
+                />
+              </div>
+              <div style={{ padding: "10px", textAlign: "center" }}>
+                <b>{m.name}</b>
+                <p style={{ fontSize: "13px", marginTop: "4px", color: "#555" }}>
+                  {m.role}
+                </p>
+              </div>
+            </div>
+          ))}
         </div>
-        <div style={{ padding: "10px", textAlign: "center" }}>
-          <b>{m.name}</b>
-          <p style={{ fontSize: "13px", marginTop: "4px", color: "#555" }}>
-            {m.role}
-          </p>
-        </div>
-      </div>
-    ))}
-  </div>
-</section>
+      </section>
 
 
 
@@ -292,7 +286,7 @@ const overlayStyle = {
 };
 const aboutSection = {
   padding: "60px 10%",
-  background: "#f4f1e6",
+  background: "#F0E9D2",
   color: "#413543",
   lineHeight: "1.9",
 };
@@ -305,12 +299,7 @@ const aboutHeading = {
 const vmContainer = { display: "flex", gap: "25px", padding: "40px 8%", background: "#fff" };
 const vmCard = { flex: 1, background: "#F9F9FF", padding: "20px", borderRadius: "10px", boxShadow: "0 0 10px rgba(0,0,0,0.1)" };
 const vmTitle = { color: "#1A2A6C", fontFamily: "Georgia" };
-const splitContainer = { 
-  display: "flex", 
-  padding: "40px 8%", 
-  gap: "30px",
-  background: "#f4f1e6"   // 👈 add this line
-};
+const splitContainer = { display: "flex", padding: "40px 8%", gap: "30px" };
 const half = { flex: 1 };
 const sectionTitle = { fontFamily: "Georgia", marginBottom: "15px", borderBottom: "2px solid #1A2A6C", paddingBottom: "6px" };
 const newsCard = { background: "#F7F7F7", padding: "12px", marginBottom: "10px", borderRadius: "6px" };

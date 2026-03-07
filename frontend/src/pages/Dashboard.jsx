@@ -1,8 +1,17 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 export default function Dashboard() {
   const navigate = useNavigate();
+
+  const user = JSON.parse(localStorage.getItem("user"));
+
+  React.useEffect(() => {
+    if (!user) {
+      navigate("/login");
+    }
+  }, [user, navigate]);
 
   const [form, setForm] = useState({ date: "", issue: "", notes: "" });
   const [error, setError] = useState("");
@@ -13,32 +22,50 @@ export default function Dashboard() {
   const handleChange = (e) =>
     setForm({ ...form, [e.target.name]: e.target.value });
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!form.date || !form.issue) {
       setError("Date and Issue are required.");
       return;
     }
-    setError("");
-    setShowSuccess(true);
-    setForm({ date: "", issue: "", notes: "" });
+    
+    try {
+      await axios.post("http://localhost:5000/api/appointments", {
+         date: new Date(form.date).toISOString(),
+         issue: form.issue,
+         notes: form.notes,
+         studentName: user.name,
+         studentRegNo: user.regNo,
+         studentEmail: user.email
+      });
+      setError("");
+      setShowSuccess(true);
+      setForm({ date: "", issue: "", notes: "" });
+    } catch (err) {
+      setError("Failed to book appointment. Please try again later.");
+      console.error(err);
+    }
   };
 
   const handleLogout = () => {
     setShowLogout(false);
+    localStorage.removeItem("user");
     navigate("/"); // Redirect to homepage
   };
 
+  if (!user) return null;
+
   return (
     <section style={styles.wrapper}>
+      {/* SUCCESS MODAL */}
       <div style={styles.container}>
-        
+
         {/* LEFT PROFILE CARD */}
         <div style={styles.leftCard}>
-          <img src="/matthew.jpeg" alt="Profile" style={styles.avatar} />
-          <h2 style={styles.name}>Matthew Cherian</h2>
-          <p style={styles.info}>Reg No: 232BCAA01</p>
-          <p style={styles.info}>Email: matthew.c@sju.com</p>
+          <img src={user.profilePic || "/faculty/matthew.jpeg"} alt="Profile" style={styles.avatar} />
+          <h2 style={styles.name}>{user.name}</h2>
+          <p style={styles.info}>Reg No: {user.regNo}</p>
+          <p style={styles.info}>Email: {user.email}</p>
           <button style={styles.logoutBtn} onClick={() => setShowLogout(true)}>
             Logout
           </button>
@@ -196,24 +223,24 @@ const styles = {
     boxShadow: "0 10px 30px rgba(0,0,0,0.2)"
   },
   modalBtn: {
-  marginTop: "15px",
-  padding: "10px 0",
-  width: "110px",
-  background: "#413543",
-  color: "#F0E9D2",
-  border: "none",
-  borderRadius: "20px",
-  cursor: "pointer"
-},
-cancelBtn: {
-  marginTop: "15px",
-  padding: "10px 0",
-  width: "110px",
-  background: "#ccc",
-  border: "none",
-  borderRadius: "20px",
-  cursor: "pointer"
-},
+    marginTop: "15px",
+    padding: "10px 0",
+    width: "110px",
+    background: "#413543",
+    color: "#F0E9D2",
+    border: "none",
+    borderRadius: "20px",
+    cursor: "pointer"
+  },
+  cancelBtn: {
+    marginTop: "15px",
+    padding: "10px 0",
+    width: "110px",
+    background: "#ccc",
+    border: "none",
+    borderRadius: "20px",
+    cursor: "pointer"
+  },
   modalActions: {
     marginTop: "15px",
     display: "flex",

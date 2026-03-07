@@ -1,31 +1,27 @@
 // pages/Events.jsx
-import React, { useState } from "react";
-
-const events = [
-  { 
-    title: "Elixir 2025", 
-    desc: "A vibrant showcase portraying the traditions, food, music, and attire of different countries, celebrating cultural diversity and global unity.", 
-    img: "/elixir.jpeg" 
-  },
-  { 
-    title: "Investiture Ceremony", 
-    desc: "A formal ceremony marking the induction of newly elected student leaders into their roles and responsibilities.", 
-    img: "/investiture.jpeg" 
-  },
-  { 
-    title: "Prathibha 2025", 
-    desc: "Vintage Trails challenges students to explore and present their knowledge of world cultures, traditions, and heritage through creative expression.",
-    img: "/g2.jpg" 
-  },
-  {
-    title: "SJU X ASPIRE Talk",
-    desc: "An inspiring talk session in collaboration with ASPIRE, focusing on career growth, innovation, and student opportunities.",
-    img: "/sjuaspire.jpg"   
-  }
-];
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 
 export default function Events() {
+  const [events, setEvents] = useState([]);
   const [current, setCurrent] = useState(0);
+  const [loading, setLoading] = useState(true);
+  
+  const backendUrl = "http://localhost:5000"; // Dev URL
+
+  useEffect(() => {
+    const fetchEvents = async () => {
+      try {
+        const { data } = await axios.get(`${backendUrl}/api/website-events`);
+        setEvents(data);
+      } catch (error) {
+        console.error("Error fetching events:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchEvents();
+  }, []);
 
   return (
     <section style={styles.wrapper}>
@@ -33,27 +29,44 @@ export default function Events() {
       <div style={styles.underline}></div>
 
 
-      <div style={styles.container}>
-        <button 
-          onClick={() => setCurrent((current - 1 + events.length) % events.length)} 
-          style={styles.arrow}
-        >
-          ←
-        </button>
-
-        <div style={styles.card}>
-          <img src={events[current].img} alt={events[current].title} style={styles.img} />
-          <h2 style={styles.title}>{events[current].title}</h2>
-          <p style={styles.desc}>{events[current].desc}</p>
+      {loading ? (
+        <div style={{ textAlign: "center", padding: "50px", fontSize: "18px", color: "#555" }}>
+           Loading events...
         </div>
+      ) : events.length === 0 ? (
+        <div style={{ textAlign: "center", padding: "50px", fontSize: "18px", color: "#555" }}>
+          No upcoming events at the moment.
+        </div>
+      ) : (
+        <div style={styles.container}>
+          <button 
+            onClick={() => setCurrent((current - 1 + events.length) % events.length)} 
+            style={styles.arrow}
+          >
+            ←
+          </button>
 
-        <button 
-          onClick={() => setCurrent((current + 1) % events.length)} 
-          style={styles.arrow}
-        >
-          →
-        </button>
-      </div>
+          <div style={styles.card}>
+            {events[current].imageUrl ? (
+              <img src={`${backendUrl}${events[current].imageUrl}`} alt={events[current].title} style={styles.img} />
+            ) : (
+              <div style={styles.noImgBlock}>
+                <span style={styles.noImgText}>{events[current].title}</span>
+              </div>
+            )}
+            <h2 style={styles.title}>{events[current].title}</h2>
+            
+            <p style={styles.desc}>{events[current].description}</p>
+          </div>
+
+          <button 
+            onClick={() => setCurrent((current + 1) % events.length)} 
+            style={styles.arrow}
+          >
+            →
+          </button>
+        </div>
+      )}
     </section>
   );
 }
@@ -113,9 +126,29 @@ title: {
 },
 
 desc: {
-  fontSize: "18px",            // ⬅ larger description
+  fontSize: "18px",
   lineHeight: "1.8",
-  color: "#555"
+  color: "#555",
+  marginTop: "15px"
+},
+noImgBlock: {
+  width: "100%",
+  height: "300px",
+  backgroundColor: "#413543",
+  borderRadius: "14px",
+  marginBottom: "20px",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  backgroundImage: "repeating-linear-gradient(45deg, rgba(255,255,255,0.03) 0px, rgba(255,255,255,0.03) 2px, transparent 2px, transparent 4px)"
+},
+noImgText: {
+  color: "#F0E9D2",
+  fontSize: "24px",
+  fontWeight: "bold",
+  fontFamily: "'Georgia', serif",
+  opacity: 0.8,
+  padding: "0 20px"
 },
   arrow: {
     fontSize: "28px",

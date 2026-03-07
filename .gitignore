@@ -1,0 +1,4 @@
+*.mp4
+push_error.txt
+node_modules/
+.env
