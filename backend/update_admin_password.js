@@ -10,10 +10,10 @@ mongoose
     const admin = await AdminUser.findOne({ email: 'admin@sju.com' });
     if (admin) {
       const salt = await bcrypt.genSalt(10);
-      const hashedPassword = await bcrypt.hash('admin123', salt);
+      const hashedPassword = await bcrypt.hash('sjuAdmin123', salt);
       admin.password = hashedPassword;
       await admin.save();
-      console.log("Updated admin password successfully to admin123");
+      console.log("Updated admin password successfully to sjuAdmin123");
     } else {
       console.log("Admin user not found.");
     }
