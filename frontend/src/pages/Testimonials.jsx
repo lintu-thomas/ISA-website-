@@ -40,31 +40,37 @@ export default function Testimonials() {
           <p>No testimonials available yet.</p>
         </div>
       ) : (
-        <div style={styles.gridContainer}>
-          {testimonials.map((testi) => (
-            <div key={testi._id} style={styles.card}>
-              {testi.videoUrl ? (
-                <div style={styles.videoWrapper}>
+        <div style={styles.contentContainer}>
+          {/* Video Testimonials */}
+          {testimonials.filter(t => t.videoUrl).length > 0 && (
+            <div style={styles.videoSection}>
+              {testimonials.filter(t => t.videoUrl).map(testi => (
+                <div key={testi._id} style={styles.singleVideoCard}>
                   <video controls style={styles.video}>
                     <source src={`http://localhost:5000${testi.videoUrl}`} type="video/mp4" />
                     Your browser does not support the video tag.
                   </video>
                 </div>
-              ) : (
-                <div style={styles.textOnlyWrapper}>
-                   <p style={styles.quote}>"{testi.message}"</p>
-                </div>
-              )}
-              
-              <div style={styles.infoSection}>
-                {testi.videoUrl && testi.message && (
-                  <p style={styles.quoteSmall}>"{testi.message}"</p>
-                )}
-                <h3 style={styles.name}>{testi.name}</h3>
-                <p style={styles.role}>{testi.role}</p>
-              </div>
+              ))}
             </div>
-          ))}
+          )}
+
+          {/* Text Testimonials */}
+          {testimonials.filter(t => !t.videoUrl).length > 0 && (
+            <div style={styles.gridContainer}>
+              {testimonials.filter(t => !t.videoUrl).map(testi => (
+                <div key={testi._id} style={styles.card}>
+                  <div style={styles.textOnlyWrapper}>
+                     <p style={styles.quote}>"{testi.message}"</p>
+                  </div>
+                  <div style={styles.infoSection}>
+                    <h3 style={styles.name}>{testi.name}</h3>
+                    <p style={styles.role}>{testi.role}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       )}
     </section>
@@ -118,13 +124,34 @@ const styles = {
     margin: "0 auto",
     borderRadius: "12px"
   },
+  contentContainer: {
+    maxWidth: "1200px",
+    margin: "0 auto",
+    padding: "0 20px"
+  },
+  videoSection: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    marginBottom: "50px",
+    gap: "30px"
+  },
+  singleVideoCard: {
+    width: "100%",
+    maxWidth: "600px",
+    backgroundColor: "#000",
+    borderRadius: "16px",
+    overflow: "hidden",
+    boxShadow: "0 10px 30px rgba(0,0,0,0.15)",
+    aspectRatio: "16/9",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center"
+  },
   gridContainer: {
     display: "grid",
     gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))",
     gap: "30px",
-    maxWidth: "1200px",
-    margin: "0 auto",
-    padding: "0 20px"
   },
   card: {
     background: "#fff",
@@ -134,14 +161,6 @@ const styles = {
     display: "flex",
     flexDirection: "column",
     transition: "transform 0.3s ease",
-  },
-  videoWrapper: {
-    width: "100%",
-    backgroundColor: "#000",
-    aspectRatio: "16/9",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center"
   },
   textOnlyWrapper: {
     padding: "40px 30px",

@@ -55,6 +55,13 @@ export default function Dashboard() {
 
   if (!user) return null;
 
+  const getProfilePic = () => {
+    let pic = user.profilePic;
+    if (!pic) pic = "/faculty/matthew.jpeg";
+    if (pic.startsWith("http")) return pic;
+    return `http://localhost:5000/uploads${pic}`;
+  };
+
   return (
     <section style={styles.wrapper}>
       {/* SUCCESS MODAL */}
@@ -62,7 +69,7 @@ export default function Dashboard() {
 
         {/* LEFT PROFILE CARD */}
         <div style={styles.leftCard}>
-          <img src={user.profilePic || "/faculty/matthew.jpeg"} alt="Profile" style={styles.avatar} />
+          <img src={getProfilePic()} alt="Profile" style={styles.avatar} />
           <h2 style={styles.name}>{user.name}</h2>
           <p style={styles.info}>Reg No: {user.regNo}</p>
           <p style={styles.info}>Email: {user.email}</p>

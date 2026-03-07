@@ -119,7 +119,8 @@ const generateData = () => {
         const regNo = `232bcaa${regNum}`;
 
         // profile pic
-        const profilePic = imageMap[user.name] || "/faculty/matthew.jpeg"; // Fallback to a known image if somehow missing
+        const picPath = imageMap[user.name] || "/faculty/matthew.jpeg"; // Fallback to a known image if somehow missing
+        const profilePic = `http://localhost:5000/uploads${picPath}`;
 
         return {
             name: user.name,
