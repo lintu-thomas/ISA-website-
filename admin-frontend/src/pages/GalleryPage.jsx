@@ -10,7 +10,7 @@ const GalleryPage = () => {
   const [uploading, setUploading] = useState(false);
   const [imageToDelete, setImageToDelete] = useState(null);
   const fileInputRef = useRef(null);
-  const backendUrl = "http://localhost:5000"; // Assuming dev backend URL
+  const backendUrl = https://isa-backend.onrender.com; // Assuming dev backend URL
 
   const fetchImages = async () => {
     try {
@@ -83,7 +83,7 @@ const GalleryPage = () => {
           <h1 className="text-[28px] text-sju-navy tracking-tight" style={{ fontFamily: "Georgia" }}>Gallery Preview</h1>
           <p className="text-sju-gray mt-1 text-[15px]">Curate images displayed on the main website.</p>
         </div>
-        
+
         <input
           type="file"
           ref={fileInputRef}
@@ -122,8 +122,8 @@ const GalleryPage = () => {
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {images.map((image) => (
-              <div 
-                key={image._id} 
+              <div
+                key={image._id}
                 className="group relative aspect-square rounded-[8px] overflow-hidden bg-white border border-sju-border shadow-sm transition-all duration-300 hover:shadow-elegant"
               >
                 <img
@@ -132,7 +132,7 @@ const GalleryPage = () => {
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                   loading="lazy"
                 />
-                
+
                 {/* Overlay */}
                 <div className="absolute inset-0 bg-gradient-to-t from-sju-navy/90 via-sju-navy/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-5">
                   <div className="flex items-center justify-between">
@@ -165,7 +165,7 @@ const GalleryPage = () => {
               className="absolute inset-0 bg-sju-navy/40 backdrop-blur-sm"
               onClick={() => setImageToDelete(null)}
             ></motion.div>
-            
+
             <motion.div
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -185,14 +185,14 @@ const GalleryPage = () => {
               </div>
 
               <div className="p-6 flex items-center justify-center gap-3">
-                <button 
-                  onClick={() => setImageToDelete(null)} 
+                <button
+                  onClick={() => setImageToDelete(null)}
                   className="flex-1 px-4 py-2.5 font-bold text-sju-gray hover:bg-sju-light border border-sju-border rounded-[6px] transition-colors"
                 >
                   Cancel
                 </button>
-                <button 
-                  onClick={confirmDelete} 
+                <button
+                  onClick={confirmDelete}
                   className="flex-1 px-4 py-2.5 font-bold bg-[#ffe0e0] text-red-700 hover:bg-red-600 hover:text-white rounded-[6px] transition-all shadow-sm"
                 >
                   Delete

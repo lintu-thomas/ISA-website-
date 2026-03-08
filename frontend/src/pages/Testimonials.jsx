@@ -9,7 +9,7 @@ export default function Testimonials() {
   useEffect(() => {
     const fetchTestimonials = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/api/testimonials");
+        const res = await axios.get("https://isa-backend.onrender.com/api/testimonials");
         setTestimonials(res.data);
       } catch (err) {
         console.error("Failed to load testimonials:", err);
@@ -47,7 +47,7 @@ export default function Testimonials() {
               {testimonials.filter(t => t.videoUrl).map(testi => (
                 <div key={testi._id} style={styles.singleVideoCard}>
                   <video controls style={styles.video}>
-                    <source src={`http://localhost:5000${testi.videoUrl}`} type="video/mp4" />
+                    <source src={`https://isa-backend.onrender.com${testi.videoUrl}`} type="video/mp4" />
                     Your browser does not support the video tag.
                   </video>
                 </div>

@@ -33,7 +33,7 @@ export default function Calendar() {
         const fetchEvents = async () => {
             setIsLoading(true);
             try {
-                const response = await fetch("http://localhost:5000/api/events");
+                const response = await fetch("https://isa-backend.onrender.com/api/events");
                 if (response.ok) {
                     const data = await response.json();
                     setApiEvents(data);
