@@ -10,6 +10,7 @@ const GalleryPage = () => {
   const [uploading, setUploading] = useState(false);
   const [imageToDelete, setImageToDelete] = useState(null);
   const fileInputRef = useRef(null);
+
   const backendUrl = "https://isa-backend-26le.onrender.com";
 
   const fetchImages = async () => {
