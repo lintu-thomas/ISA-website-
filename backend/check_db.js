@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const AdminUser = require('./models/AdminUser');
 
-mongoose.connect('mongodb://127.0.0.1:27017/isa_db').then(async () => {
+mongoose.connect(process.env.MONGO_URI).then(async () => {
   const users = await AdminUser.find({});
   console.log("Admin Users in DB:");
   console.log(users);

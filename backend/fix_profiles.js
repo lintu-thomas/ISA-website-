@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const User = require('./models/User');
 
-mongoose.connect('mongodb://127.0.0.1:27017/isa_db').then(async () => {
+mongoose.connect(process.env.MONGO_URI).then(async () => {
   try {
     const users = await User.find({ profilePic: { $regex: '^/faculty/' } });
     for (let user of users) {

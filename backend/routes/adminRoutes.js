@@ -8,18 +8,16 @@ router.post('/login', async (req, res) => {
   console.log("LOGIN ATTEMPT RECIEVED:", req.body);
   const { email, password } = req.body;
   try {
-    const admin = await AdminUser.findOne({ email });
+    const admin = await adminusers.findOne({ email });
+
     if (!admin) {
-      console.log("No admin found with email:", email);
-      return res.status(401).json({ success: false, message: "Invalid credentials" });
+      return res.status(401).json({ message: "Admin not found" });
     }
-    
-    console.log("Found admin user");
 
     const isMatch = await bcrypt.compare(password, admin.password);
+
     if (!isMatch) {
-      console.log("Password did not match");
-      return res.status(401).json({ success: false, message: "Invalid credentials" });
+      return res.status(401).json({ message: "Invalid password" });
     }
 
     console.log("Password matched!");
