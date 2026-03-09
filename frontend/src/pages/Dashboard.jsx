@@ -30,7 +30,7 @@ export default function Dashboard() {
     }
     
     try {
-      await axios.post("https://isa-backend.onrender.com/api/appointments", {
+      await axios.post("https://isa-backend-26le.onrender.com/api/appointments", {
          date: new Date(form.date).toISOString(),
          issue: form.issue,
          notes: form.notes,
@@ -59,7 +59,7 @@ export default function Dashboard() {
     let pic = user.profilePic;
     if (!pic) pic = "/faculty/matthew.jpeg";
     if (pic.startsWith("http")) return pic;
-    return `https://isa-backend.onrender.com/uploads${pic}`;
+    return `https://isa-backend-26le.onrender.com/uploads${pic}`;
   };
 
   return (

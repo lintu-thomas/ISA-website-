@@ -120,7 +120,7 @@ const generateData = () => {
 
         // profile pic
         const picPath = imageMap[user.name] || "/faculty/matthew.jpeg"; // Fallback to a known image if somehow missing
-        const profilePic = `https://isa-backend.onrender.com/uploads${picPath}`;
+        const profilePic = `https://isa-backend-26le.onrender.com/uploads${picPath}`;
 
         return {
             name: user.name,

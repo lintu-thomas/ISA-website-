@@ -7,7 +7,7 @@ export default function Events() {
   const [current, setCurrent] = useState(0);
   const [loading, setLoading] = useState(true);
 
-  const backendUrl = "https://isa-backend.onrender.com"; // Dev URL
+  const backendUrl = "https://isa-backend-26le.onrender.com"; // Dev URL
 
   useEffect(() => {
     const fetchEvents = async () => {
