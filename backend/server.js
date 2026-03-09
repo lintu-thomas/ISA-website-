@@ -20,10 +20,9 @@ app.use(express.json());
 const path = require("path");
 app.use("/uploads", express.static(path.join(__dirname, "public/uploads")));
 
-mongoose
-  .connect("mongodb://127.0.0.1:27017/isa_db")
+mongoose.connect(process.env.MONGO_URI || "mongodb://127.0.0.1:27017/isa_db")
   .then(async () => {
-    console.log("MongoDB Connected");
+    console.log("MongoDB connected");
 
     // Auto-seed default admin if not exists
     const adminExists = await AdminUser.findOne({ email: 'admin@sju.com' });
