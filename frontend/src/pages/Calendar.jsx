@@ -1,4 +1,5 @@
 import { useState, useMemo, useEffect } from "react";
+import API_URL from "../utils/api";
 
 export default function Calendar() {
     const months = [
@@ -33,7 +34,7 @@ export default function Calendar() {
         const fetchEvents = async () => {
             setIsLoading(true);
             try {
-                const response = await fetch("https://isa-backend-26le.onrender.com/api/events");
+                const response = await fetch(`${API_URL}/events`);
                 if (response.ok) {
                     const data = await response.json();
                     setApiEvents(data);

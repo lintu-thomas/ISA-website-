@@ -12,6 +12,8 @@ import WebsiteEventsPage from "./pages/WebsiteEventsPage";
 import GalleryPage from "./pages/GalleryPage";
 import AppointmentsPage from "./pages/AppointmentsPage";
 import TestimonialsPage from "./pages/TestimonialsPage";
+import NewsPage from "./pages/NewsPage";
+import AdminServicesPage from "./pages/AdminServicesPage";
 
 function App() {
   return (
@@ -47,6 +49,8 @@ function App() {
             <Route path="gallery" element={<GalleryPage />} />
             <Route path="appointments" element={<AppointmentsPage />} />
             <Route path="testimonials" element={<TestimonialsPage />} />
+            <Route path="news" element={<NewsPage />} />
+            <Route path="services" element={<AdminServicesPage />} />
           </Route>
           
           <Route path="*" element={<Navigate to="/" replace />} />

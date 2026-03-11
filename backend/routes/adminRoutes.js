@@ -5,22 +5,27 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
 router.post('/login', async (req, res) => {
-  console.log("LOGIN ATTEMPT RECIEVED:", req.body);
+  console.log("LOGIN ATTEMPT RECEIVED:", req.body);
   const { email, password } = req.body;
+  const trimmedEmail = email ? email.trim() : "";
+
   try {
-    const admin = await adminusers.findOne({ email });
+    console.log(`Checking for admin: "${trimmedEmail}"`);
+    const admin = await AdminUser.findOne({ email: trimmedEmail });
 
     if (!admin) {
+      console.log("Admin email NOT found in database.");
       return res.status(401).json({ message: "Admin not found" });
     }
 
     const isMatch = await bcrypt.compare(password, admin.password);
 
     if (!isMatch) {
+      console.log("Admin email found, but password does NOT match.");
       return res.status(401).json({ message: "Invalid password" });
     }
 
-    console.log("Password matched!");
+    console.log("Credentials match! Generating token...");
 
     const payload = {
       admin: {

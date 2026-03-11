@@ -1,8 +1,25 @@
 // pages/Services.jsx
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import API_URL from "../utils/api";
 
 export default function Services() {
+  const [services, setServices] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetch(`${API_URL}/services`)
+      .then((res) => res.json())
+      .then((data) => {
+        setServices(data);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error("Error fetching services:", err);
+        setLoading(false);
+      });
+  }, []);
+
   return (
     <section style={styles.container}>
       <header style={styles.header}>
@@ -15,62 +32,38 @@ export default function Services() {
       </header>
 
       <div style={styles.card}>
-        {/* Magis Exchange Program */}
-        <div style={styles.serviceItem} className="service-hover">
-          <h3 style={styles.serviceTitle}>Magis Exchange Program</h3>
-          <p style={styles.serviceText}>
-            The Magis Exchange Program provides international students with
-            opportunities to study abroad and engage in cultural exchange.
-            Students can experience different academic environments and develop valuable cross-cultural skills.
-            
-          </p>
-          <a
-            href="https://www.sju.edu.in/magis-exchange-program"
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{ ...styles.button, backgroundColor: "#5C7AEA" }}
-          >
-            Learn More
-          </a>
-        </div>
-
-        <hr style={styles.divider} />
-
-        {/* Scholarships & Financial Aid */}
-        <div style={styles.serviceItem} className="service-hover">
-          <h3 style={styles.serviceTitle}>Scholarships & Financial Aid</h3>
-          <p style={styles.serviceText}>
-            Various scholarships and financial assistance programs are available
-            to support international students during their academic journey.
-            These programs aim to reduce financial barriers, reward academic
-            excellence, and promote access to quality education. 
-          </p>
-          <Link
-            to="/scholarships"
-            style={{ ...styles.button, backgroundColor: "#413543" }}
-          >
-            View Scholarship Details
-          </Link>
-        </div>
-
-        <hr style={styles.divider} />
-
-        {/* Student Support Appointments */}
-        <div style={styles.serviceItem} className="service-hover">
-          <h3 style={styles.serviceTitle}>Student Support Appointments</h3>
-          <p style={styles.serviceText}>
-            Book a one-on-one appointment with the International Students Office
-            for assistance related to visas, accommodation, academics, or personal concerns.
-            Our staff provides personalized guidance and helps students navigate
-            challenges during their time at the university. 
-          </p>
-          <Link
-            to="/login"
-            style={{ ...styles.button, backgroundColor: "#413543" }}
-          >
-            Book an Appointment
-          </Link>
-        </div>
+        {loading ? (
+          <div style={{ textAlign: "center", padding: "20px" }}>Loading services...</div>
+        ) : services.length === 0 ? (
+          <div style={{ textAlign: "center", padding: "20px" }}>No services available.</div>
+        ) : (
+          services.map((service, index) => (
+            <React.Fragment key={service._id}>
+              <div style={styles.serviceItem} className="service-hover">
+                <h3 style={styles.serviceTitle}>{service.title}</h3>
+                <p style={styles.serviceText}>{service.description}</p>
+                {service.link.startsWith("http") ? (
+                  <a
+                    href={service.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{ ...styles.button, backgroundColor: service.buttonBgColor || "#413543" }}
+                  >
+                    {service.linkText}
+                  </a>
+                ) : (
+                  <Link
+                    to={service.link}
+                    style={{ ...styles.button, backgroundColor: service.buttonBgColor || "#413543" }}
+                  >
+                    {service.linkText}
+                  </Link>
+                )}
+              </div>
+              {index < services.length - 1 && <hr style={styles.divider} />}
+            </React.Fragment>
+          ))
+        )}
       </div>
 
       {/* Inline styles for hover effects */}
