@@ -11,7 +11,7 @@ const GalleryPage = () => {
   const [imageToDelete, setImageToDelete] = useState(null);
   const fileInputRef = useRef(null);
 
-  const backendUrl = "https://isa-backend-26le.onrender.com";
+  const backendUrl = "https://isa-backend-production.up.railway.app";
 
   const fetchImages = async () => {
     try {

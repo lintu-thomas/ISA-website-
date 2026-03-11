@@ -18,7 +18,7 @@ export default function Login() {
     }
 
     try {
-      const res = await fetch("https://isa-backend-26le.onrender.com/api/auth/login", {
+      const res = await fetch("https://isa-backend-production.up.railway.app/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form)

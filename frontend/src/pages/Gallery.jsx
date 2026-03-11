@@ -6,7 +6,7 @@ export default function Gallery() {
   const [index, setIndex] = useState(0);
   const [loading, setLoading] = useState(true);
   
-  const backendUrl = "https://isa-backend-26le.onrender.com"; // Dev URL
+  const backendUrl = "https://isa-backend-production.up.railway.app"; // Dev URL
 
   useEffect(() => {
     const fetchGallery = async () => {

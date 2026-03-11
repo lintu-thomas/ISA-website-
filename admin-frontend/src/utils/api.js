@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || "https://isa-backend-26le.onrender.com/api",
+  baseURL: import.meta.env.VITE_API_URL || "https://isa-backend-production.up.railway.app/api",
 });
 
 // Add a request interceptor to attach the JWT token
