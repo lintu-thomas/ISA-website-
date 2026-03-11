@@ -1,3 +1,4 @@
+require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
@@ -11,6 +12,8 @@ const eventRoutes = require("./routes/eventRoutes");
 const galleryRoutes = require("./routes/galleryRoutes");
 const testimonialRoutes = require("./routes/testimonialRoutes");
 const websiteEventRoutes = require("./routes/websiteEventRoutes");
+const newsRoutes = require("./routes/newsRoutes");
+const serviceRoutes = require("./routes/serviceRoutes");
 
 const app = express();
 app.use(cors());
@@ -46,6 +49,8 @@ app.use("/api/events", eventRoutes);
 app.use("/api/gallery", galleryRoutes);
 app.use("/api/testimonials", testimonialRoutes);
 app.use("/api/website-events", websiteEventRoutes);
+app.use("/api/news", newsRoutes);
+app.use("/api/services", serviceRoutes);
 
 app.get("/", (req, res) => {
   res.send("Backend running");

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { LayoutDashboard, Calendar, Image as ImageIcon, LogOut, ChevronLeft, ChevronRight, CalendarHeart, MessageSquareQuote } from "lucide-react";
+import { LayoutDashboard, Calendar, Image as ImageIcon, LogOut, ChevronLeft, ChevronRight, CalendarHeart, MessageSquareQuote, Newspaper, Briefcase } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 import sjuLogo from "../assets/logosju1.png"; // Import logo
 
@@ -12,6 +12,8 @@ const Sidebar = () => {
 
   const navItems = [
     { name: "Dashboard", path: "/", icon: <LayoutDashboard size={20} /> },
+    { name: "Services", path: "/services", icon: <Briefcase size={20} /> },
+    { name: "Latest News", path: "/news", icon: <Newspaper size={20} /> },
     { name: "Calendar Events", path: "/calendar", icon: <Calendar size={20} /> },
     { name: "Events", path: "/events", icon: <ImageIcon size={20} /> },
     { name: "Appointments", path: "/appointments", icon: <CalendarHeart size={20} /> },

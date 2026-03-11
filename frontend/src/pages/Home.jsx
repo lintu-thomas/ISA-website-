@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import API_URL from "../utils/api";
 import Calendar from "./Calendar";
 
 /* HERO IMAGES */
@@ -44,35 +45,15 @@ export default function Home() {
     setCurrent((prev) => (prev === 0 ? images.length - 1 : prev - 1));
 
   /* NEWS */
-  const news = [
-    { title: "Boston University Visit", date: "17 Feb 2025" },
-    { title: "Talk on Leadership by Geshe Lodoe Sangpo", date: "12 Jan 2025" },
-    { title: "Rev. Dr Ambrose Pinto, S.J. Memorial Lecture", date: "8 Jan 2025" },
-  ];
+  const [news, setNews] = useState([]);
 
-  /* CALENDAR */
-  const calendar = [
-    ["", "", "1", "2", "3", "4", "5"],
-    ["6", "7", "8", "9", "10", "11", "12"],
-    ["13", "14", "15", "16", "17", "18", "19"],
-    ["20", "21", "22", "23", "24", "25", "26"],
-    ["27", "28", "", "", "", "", ""],
-  ];
+  useEffect(() => {
+    fetch(`${API_URL}/news`)
+      .then((res) => res.json())
+      .then((data) => setNews(data))
+      .catch((err) => console.error("Error fetching news:", err));
+  }, []);
 
-  const marked = {
-    8: "Memorial Lecture – SJU",
-    12: "Leadership Talk – SJU",
-    17: "Boston University Visit",
-    21: "World Religion Day",
-    22: "Mother Language Day",
-    24: "International Education Day",
-    26: "Republic Day – India",
-    27: "Holocaust Remembrance",
-    28: "Data Privacy Day",
-    30: "World Leprosy Day",
-    15: "Global Culture Exchange",
-    20: "Social Justice Day",
-  };
 
   /* FACULTY */
   const faculty = [
