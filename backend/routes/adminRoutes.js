@@ -2,7 +2,6 @@ const express = require('express');
 const router = express.Router();
 const AdminUser = require('../models/AdminUser');
 const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
 
 router.post('/login', async (req, res) => {
   console.log("LOGIN ATTEMPT RECEIVED:", req.body);
@@ -27,21 +26,8 @@ router.post('/login', async (req, res) => {
 
     console.log("Credentials match! Generating token...");
 
-    const payload = {
-      admin: {
-        id: admin.id
-      }
-    };
-
-    jwt.sign(
-      payload,
-      process.env.JWT_SECRET || "fallback_secret_key",
-      { expiresIn: "5h" },
-      (err, token) => {
-        if (err) throw err;
-        res.json({ success: true, token, message: "Login successful" });
-      }
-    );
+    // Dispensing static authentication token instead of JWT
+    res.json({ success: true, token: "isa-admin-auth-token", message: "Login successful" });
   } catch (err) {
     console.error("Login Error:", err);
     res.status(500).json({ success: false, message: "Server Error", error: err.message });

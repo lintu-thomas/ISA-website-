@@ -1,17 +1,19 @@
-const jwt = require("jsonwebtoken");
-
 const authMiddleware = (req, res, next) => {
-  const token = req.header("Authorization");
+  let token = req.header("Authorization");
 
   if (!token) {
     return res.status(401).json({ message: "No token, authorization denied" });
   }
+  
+  // Remove "Bearer " prefix if it exists
+  token = token.replace("Bearer ", "");
 
-  try {
-    const decoded = jwt.verify(token.replace("Bearer ", ""), process.env.JWT_SECRET || "fallback_secret_key");
-    req.admin = decoded;
+  // Static token verification
+  if (token === "isa-admin-auth-token") {
+    // Add a dummy admin object just in case any routes expect req.admin.id
+    req.admin = { id: "static-admin-id" };
     next();
-  } catch (err) {
+  } else {
     res.status(401).json({ message: "Token is not valid" });
   }
 };
