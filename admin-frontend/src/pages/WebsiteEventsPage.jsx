@@ -164,9 +164,9 @@ const WebsiteEventsPage = () => {
                   <tr key={event._id} className="border-b border-sju-border/50 hover:bg-[#FAF8F3] transition-colors group">
                     <td className="p-5 font-bold text-sju-navy text-[16px]">
                       <div className="flex items-center gap-3">
-                        {event.imageUrl ? (
-                           <img src={`https://isa-backend-production.up.railway.app${event.imageUrl}`} alt={event.title} className="w-10 h-10 rounded-[4px] object-cover border border-sju-border shadow-sm" onError={(e) => { e.target.src = 'https://via.placeholder.com/40x40?text=Event'; }} />
-                        ) : (
+                         {event.imageUrl ? (
+                            <img src={`http://localhost:5000${event.imageUrl}`} alt={event.title} className="w-10 h-10 rounded-[4px] object-cover border border-sju-border shadow-sm" onError={(e) => { e.target.src = 'https://via.placeholder.com/40x40?text=Event'; }} />
+                         ) : (
                            <div className="w-10 h-10 rounded-[4px] bg-[#E0E0FF] flex items-center justify-center border border-sju-border shadow-sm text-sju-navy font-bold text-[12px]">No Img</div>
                         )}
                         <span>{event.title}</span>

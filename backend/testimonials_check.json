@@ -1,0 +1,30 @@
+[
+  {
+    "_id": "69ab42073e22bb90f1bce40b",
+    "name": "Nathan Daniel",
+    "role": "222BCAA56",
+    "message": "The association made me feel welcome to this new country and new experiences!",
+    "createdAt": "2026-03-06T21:07:19.334Z",
+    "updatedAt": "2026-03-06T21:07:19.334Z",
+    "__v": 0
+  },
+  {
+    "_id": "69ab425a3e22bb90f1bce40e",
+    "name": "Naqmeh",
+    "role": "221ECST11",
+    "message": "The events and cultural activities hosted by ISA are amazing.\n",
+    "createdAt": "2026-03-06T21:08:42.136Z",
+    "updatedAt": "2026-03-06T21:08:42.136Z",
+    "__v": 0
+  },
+  {
+    "_id": "69abb2b0929c20d5a256cd79",
+    "name": "Matthew Cherian",
+    "role": "242BBAC56",
+    "message": "Being part of ISA has been an incredible experience. The association creates a warm and welcoming environment for everyone, especially for students who are new to the country.",
+    "videoUrl": "/uploads/testimonial-1773337379347.mp4",
+    "createdAt": "2026-03-07T05:08:00.300Z",
+    "updatedAt": "2026-03-12T17:45:35.333Z",
+    "__v": 0
+  }
+]

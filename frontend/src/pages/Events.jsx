@@ -7,7 +7,7 @@ export default function Events() {
   const [current, setCurrent] = useState(0);
   const [loading, setLoading] = useState(true);
 
-  const backendUrl = "https://isa-backend-production.up.railway.app"; // Dev URL
+  const backendUrl = "http://localhost:5000"; // Dev URL
 
   useEffect(() => {
     const fetchEvents = async () => {

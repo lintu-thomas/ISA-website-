@@ -9,7 +9,7 @@ export default function Testimonials() {
   useEffect(() => {
     const fetchTestimonials = async () => {
       try {
-        const res = await axios.get("https://isa-backend-production.up.railway.app/api/testimonials");
+        const res = await axios.get("http://localhost:5000/api/testimonials");
         setTestimonials(res.data);
       } catch (err) {
         console.error("Failed to load testimonials:", err);
@@ -42,35 +42,29 @@ export default function Testimonials() {
       ) : (
         <div style={styles.contentContainer}>
           {/* Video Testimonials */}
-          {testimonials.filter(t => t.videoUrl).length > 0 && (
-            <div style={styles.videoSection}>
-              {testimonials.filter(t => t.videoUrl).map(testi => (
-                <div key={testi._id} style={styles.singleVideoCard}>
-                  <video controls style={styles.video}>
-                    <source src={`https://isa-backend-production.up.railway.app${testi.videoUrl}`} type="video/mp4" />
-                    Your browser does not support the video tag.
-                  </video>
-                </div>
-              ))}
+          <div style={styles.videoSection}>
+            <div style={styles.singleVideoCard}>
+              <video controls style={styles.video} autoPlay muted loop>
+                <source src="/ISA.mp4" type="video/mp4" />
+                Your browser does not support the video tag.
+              </video>
             </div>
-          )}
+          </div>
 
-          {/* Text Testimonials */}
-          {testimonials.filter(t => !t.videoUrl).length > 0 && (
-            <div style={styles.gridContainer}>
-              {testimonials.filter(t => !t.videoUrl).map(testi => (
-                <div key={testi._id} style={styles.card}>
-                  <div style={styles.textOnlyWrapper}>
-                     <p style={styles.quote}>"{testi.message}"</p>
-                  </div>
-                  <div style={styles.infoSection}>
-                    <h3 style={styles.name}>{testi.name}</h3>
-                    <p style={styles.role}>{testi.role}</p>
-                  </div>
+          {/* Text Testimonials Grid */}
+          <div style={styles.gridContainer}>
+            {testimonials.map(testi => (
+              <div key={testi._id} style={styles.card}>
+                <div style={styles.textOnlyWrapper}>
+                   <p style={styles.quote}>"{testi.message}"</p>
                 </div>
-              ))}
-            </div>
-          )}
+                <div style={styles.infoSection}>
+                  <h3 style={styles.name}>{testi.name}</h3>
+                  <p style={styles.role}>{testi.role}</p>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       )}
     </section>
@@ -150,8 +144,10 @@ const styles = {
   },
   gridContainer: {
     display: "grid",
-    gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))",
+    gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))",
     gap: "30px",
+    justifyContent: "center", // Centering the grid items
+    alignItems: "stretch" // Ensure all grid items fill the row height
   },
   card: {
     background: "#fff",
@@ -160,14 +156,18 @@ const styles = {
     boxShadow: "0 10px 30px rgba(0,0,0,0.08)",
     display: "flex",
     flexDirection: "column",
+    height: "100%", // Fill the grid cell
     transition: "transform 0.3s ease",
   },
   textOnlyWrapper: {
     padding: "40px 30px",
     backgroundColor: "#4b3a52",
-    flex: 1,
+    flex: 1, // Take up remaining space
     display: "flex",
-    alignItems: "center"
+    alignItems: "center",
+    justifyContent: "center",
+    textAlign: "center",
+    minHeight: "180px" // Minimum height for consistency
   },
   video: {
     width: "100%",

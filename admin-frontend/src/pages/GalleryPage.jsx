@@ -11,7 +11,7 @@ const GalleryPage = () => {
   const [imageToDelete, setImageToDelete] = useState(null);
   const fileInputRef = useRef(null);
 
-  const backendUrl = "https://isa-backend-production.up.railway.app";
+  const backendUrl = "http://localhost:5000";
 
   const fetchImages = async () => {
     try {
@@ -87,6 +87,7 @@ const GalleryPage = () => {
 
         <input
           type="file"
+          id="gallery-file-input"
           ref={fileInputRef}
           onChange={handleFileSelect}
           className="hidden"

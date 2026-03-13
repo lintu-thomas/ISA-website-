@@ -30,7 +30,7 @@ export default function Dashboard() {
     }
     
     try {
-      await axios.post("https://isa-backend-production.up.railway.app/api/appointments", {
+      await axios.post("http://localhost:5000/api/appointments", {
          date: new Date(form.date).toISOString(),
          issue: form.issue,
          notes: form.notes,
@@ -57,9 +57,16 @@ export default function Dashboard() {
 
   const getProfilePic = () => {
     let pic = user.profilePic;
-    if (!pic) pic = "/faculty/matthew.jpeg";
+    if (!pic) return "/faculty/matthew.jpeg";
+    
+    // If the path contains /faculty/, use it directly from frontend public
+    if (typeof pic === 'string' && pic.includes('/faculty/')) {
+      const parts = pic.split('/faculty/');
+      return `/faculty/${parts[1]}`;
+    }
+
     if (pic.startsWith("http")) return pic;
-    return `https://isa-backend-production.up.railway.app/uploads${pic}`;
+    return `http://localhost:5000/uploads${pic}`;
   };
 
   return (
